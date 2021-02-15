@@ -1,0 +1,14 @@
+*.swp
+*.swn
+*.swo
+*.swl
+*.egg-info
+*.pyc
+*.pyo
+venv/
+__pycache__/
+.cache/
+.pytest_cache/
+dist/
+build/
+.vscode
