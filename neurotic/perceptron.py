@@ -186,21 +186,16 @@ class PerceptronClassifier:
 
 # Program Point of Entry
 if __name__ == '__main__':
-    from random import randint, random
-
     def build_cluster_centered_on(count, center, radius=None) -> np.array:
-        radius = radius or (0.75 + random() * 2)
+        radius = radius or (0.75 + np.random.random() * 2)
         return center + (radius * np.random.randn(count, 2))
 
     figure, axes = pp.subplots(3, 5)
 
     for i in range(len(axes)):
         for j in range(len(axes[0, :])):
-            size = randint(50, 500)
-            centers = [
-                [randint(1, 16), randint(1, 16)],
-                [randint(1, 16), randint(1, 16)]
-            ]
+            size = np.random.randint(50, 500)
+            centers = np.random.randint(1, 16, (2, 2))
             clusters = [
                 # training clusters:
                 build_cluster_centered_on(size, center=centers[0]),
