@@ -170,7 +170,7 @@ class PerceptronClassifier:
         with open(filepath, 'w') as json_file:
             json.dump({
                 'type': type(self).__name__,
-                'weights': self.weights
+                'weights': list(self.weights or []),
             }, json_file)
 
     @classmethod
@@ -181,7 +181,7 @@ class PerceptronClassifier:
         """
         with open(filepath, 'r') as json_file:
             data = json.load(json_file)
-            return cls(weights=data['weights'])
+            return cls(weights=np.array(data['weights'], dtype=float))
 
 
 # Program Point of Entry
