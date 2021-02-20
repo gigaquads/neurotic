@@ -6,13 +6,13 @@ import pandas as pd
 from numpy import ndarray as Array
 from matplotlib import pyplot as pp
 
-from .activation_functions import sigmoid, sigmoid_derivative
 from .error_functions import MSE
+from .activation_functions import softmax, sigmoid, sigmoid_derivative
 
 
 class Layer:
     """
-    Layer abstraction used internally by NeuralNetworkClassifier for mostly
+    Layer abstraction used internally by MultilayerPerceptronClassifier for mostly
     code-structuring purposes.
     """
     def __init__(self, size: int, weights: Array = None):
@@ -39,31 +39,31 @@ class Layer:
         return self.outputs
 
 
-class NeuralNetworkClassifier:
-    def __init__(self, layers: List[Layer]):
+class MultilayerPerceptronClassifier:
+    def __init__(self, layers: List[Layer], softmax=True):
         self.layers = layers
         self.meta = {}
+        self.use_softmax = softmax
 
     def __call__(self, inputs: Array) -> Array:
         """
         A trained classifier is treated as a function-like object. It is
         intended to be used like this:
 
-        classify = NeuralNetworkClassifier(layers).train(**kwargs)
+        classify = MultilayerPerceptronClassifier(layers).train(**kwargs)
         output = classify(input)
 
-        The network takes your input, feeds it forward through the layers, outputting
-        the *raw* output of the terminal layer.
+        The network takes the input, feeds it forward, and returns the
+        corresponding raw output or softmax logits. 
         
-        NOTE: It is your responsibility to perform any subsequent
-        post-processing before determining which class it belongs to.
         """
         for layer in self.layers:
             outputs = layer(inputs)
             inputs = outputs
 
+        # return the raw output or softmax logits
         outputs = self.layers[-1].outputs
-        return outputs
+        return softmax(outputs) if self.use_softmax else outputs
 
     def train(
         self,
@@ -71,7 +71,7 @@ class NeuralNetworkClassifier:
         inputs: Array,
         epochs: int = 1000,
         rate: float = 0.1
-    ) -> 'NeuralNetworkClassifier':
+    ) -> 'MultilayerPerceptronClassifier':
         """
         - Initialize each weight matrix to small random values.
         - For each epoch:

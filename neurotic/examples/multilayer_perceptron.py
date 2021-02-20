@@ -1,5 +1,5 @@
 """
-This example trains multiple NeuralNetworkClassifiers, visualizing the
+This example trains multiple MultilayerPerceptronClassifiers, visualizing the
 effects of different learning rates, PRNG seeds, and train/test splits.
 """
 
@@ -11,7 +11,7 @@ import numpy as np
 
 from matplotlib import pyplot as pp
 
-from neurotic.classifiers import NeuralNetworkClassifier, Layer
+from neurotic.classifiers import MultilayerPerceptronClassifier, Layer
 from neurotic.data import titanic_train_test_split
 
 data_dir = os.path.join(os.path.dirname(__file__), 'data')
@@ -34,8 +34,8 @@ def main():
             )
         )
 
-        # build and train the neural network
-        classifier = NeuralNetworkClassifier([
+        # build and train the network
+        classifier = MultilayerPerceptronClassifier([
             Layer(24), Layer(4), Layer(1)
         ]).train(
             labels=training_labels,
