@@ -1,3 +1,11 @@
+"""
+This example plots a handful of perceptrons, each trained on 2 random
+clusters of points with varying degrees of overlap, size, and density.
+
+The test data consists of clusters that are similar to the training clusters
+in their distributions.
+"""
+
 import numpy as np
 
 from matplotlib import pyplot as pp
