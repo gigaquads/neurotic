@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Dense
 
-from neurotic.layers.preprocessing import DataframePreprocessor
+from neurotic.models.preprocessing import DataframePreprocessor
 
 from .internal.data_loaders import titanic_train_test_split
 
