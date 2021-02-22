@@ -4,10 +4,13 @@ from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 
+from .paths import TITANIC_CSV_FILEPATH
+
 
 def titanic_train_test_split(
-    filepath='./titanic.csv',
+    filepath=TITANIC_CSV_FILEPATH,
     test_size=0.2,
+    one_hot=True,
 ) -> DataFrame:
     """
     """
@@ -23,9 +26,10 @@ def titanic_train_test_split(
     })
 
     # one-hot encode these columns:
-    df = pd.get_dummies(df, columns=[
-        'Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'
-    ])
+    if one_hot:
+        df = pd.get_dummies(df, columns=[
+            'Pclass', 'Sex', 'SibSp', 'Parch', 'Embarked'
+        ])
 
     # scale columns to values between (0, 1)
     scaler = MinMaxScaler()
@@ -36,6 +40,8 @@ def titanic_train_test_split(
     y = df[['Survived']].values
 
     # split data into train/test sets
-    return train_test_split(
-        x, y, test_size=test_size, random_state=0
+    retval = [df]
+    retval.extend(
+        train_test_split(x, y, test_size=test_size, random_state=0)
     )
+    return retval

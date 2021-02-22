@@ -12,10 +12,7 @@ import numpy as np
 from matplotlib import pyplot as pp
 
 from neurotic.classifiers import MultilayerPerceptronClassifier, Layer
-from neurotic.data import titanic_train_test_split
-
-data_dir = os.path.join(os.path.dirname(__file__), 'data')
-data_filepath = os.path.join(data_dir, 'titanic.csv')
+from .internal.data_loaders import titanic_train_test_split
 
 
 def main():
@@ -28,7 +25,7 @@ def main():
             training_labels, _test_labels
         ) = (
             titanic_train_test_split(
-                filepath=data_filepath,
+                filepath=TITANIC_CSV_FILEPATH,
                 # % data reserved for testing:
                 test_size=0.05 + (0.45 * np.random.random())
             )
