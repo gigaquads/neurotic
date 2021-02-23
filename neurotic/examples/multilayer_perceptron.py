@@ -25,7 +25,6 @@ def main():
             training_labels, _test_labels
         ) = (
             titanic_train_test_split(
-                filepath=TITANIC_CSV_FILEPATH,
                 # % data reserved for testing:
                 test_size=0.05 + (0.45 * np.random.random())
             )
