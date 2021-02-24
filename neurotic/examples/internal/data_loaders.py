@@ -126,4 +126,4 @@ def jena_climate_2009_2016(split=(0.7, 0.2, 0.1)) -> Tuple:
     x_validation = (x_validation - train_mean) / train_std
     x_test = (x_test - train_mean) / train_std
 
-    return (df, time, (x_train, x_validation, x_test))
+    return (x_train, x_validation, x_test)
