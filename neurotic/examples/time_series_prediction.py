@@ -3,7 +3,7 @@ from tensorflow.keras.layers import LSTM, Dense
 from tensorflow.keras.metrics import MeanAbsoluteError
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-from neurotic.data.loaders import SingleStepTimeSeriesDataFrameLoader
+from neurotic.data.loaders import SingleStepTimeSeriesDatasetLoader
 from neurotic.training import Trainer
 
 from .internal.data_loaders import jena_climate_2009_2016
@@ -43,7 +43,7 @@ def main():
     # create a Loader, which prepares time series data stored in a DataFrame
     # for use in our model, being trained to predict the next `step` number of
     # time steps, given the previous `period` number of time steps.
-    loader = SingleStepTimeSeriesDataFrameLoader(
+    loader = SingleStepTimeSeriesDatasetLoader(
         key='T (degC)', period=24, step=1, batch_size=batch_size
     )
 

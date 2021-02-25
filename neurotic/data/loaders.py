@@ -16,7 +16,7 @@ class DatasetLoader:
     Datasets. To implement your own subclass, you must override the abstract
     self.on_load method.
 
-    An example of a loader is the SingleStepTimeSeriesDataFrameLoader. This
+    An example of a loader is the SingleStepTimeSeriesDatasetLoader. This
     loader returns a Dataset whose inputs and labels are configured for a
     RNN, which operates on a fixed window size and predicts a fixed length
     step into the future.
@@ -66,7 +66,7 @@ class DatasetLoader:
         raise NotImplementedError()
 
 
-class TimeSeriesDataFrameLoader(DatasetLoader):
+class TimeSeriesDatasetLoader(DatasetLoader):
     def on_load(
         self,
         df: Union[DataFrame, List[DataFrame]]
@@ -74,9 +74,9 @@ class TimeSeriesDataFrameLoader(DatasetLoader):
         raise NotImplementedError()
 
 
-class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
+class SingleStepTimeSeriesDatasetLoader(TimeSeriesDatasetLoader):
     """
-    The SingleStepTimeSeriesDataFrameLoader is useful for time series
+    The SingleStepTimeSeriesDatasetLoader is useful for time series
     prediction, where you'd like to predict one or more final values in a
     given window of time series data.
     
@@ -90,7 +90,7 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
     period = 10
     step = 1
 
-    loader = SingleStepTimeSeriesDataFrameLoader(key, period, step)
+    loader = SingleStepTimeSeriesDatasetLoader(key, period, step)
     ds = loader.load(df)  # `df` being your "features" dataframe
     ```
 

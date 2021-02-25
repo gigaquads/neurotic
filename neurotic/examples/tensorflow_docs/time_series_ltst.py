@@ -2,7 +2,7 @@
 https://www.tensorflow.org/tutorials/structured_data/time_series
 """
 
-from neurotic.data.loaders import SingleStepTimeSeriesDataFrameLoader
+from neurotic.data.loaders import SingleStepTimeSeriesDatasetLoader
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
