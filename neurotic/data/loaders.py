@@ -114,7 +114,7 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
         self.window = period + step
         self.period = period
         self.batch_size = batch_size
-        self.step = 1
+        self.step = step
     
     def on_load(
         self,

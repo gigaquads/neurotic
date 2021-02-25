@@ -10,10 +10,12 @@ from .internal.data_loaders import jena_climate_2009_2016
 
 
 def main():
+    batch_size = 32
+
     # Create a RNN using LSTM cells. We will feed it batches of 32 (inputs,
     # labels) pairs each.
     model = Sequential([
-        LSTM(32, return_sequences=True),
+        LSTM(batch_size, return_sequences=True),
         Dense(units=1)
     ])
 
@@ -43,7 +45,7 @@ def main():
     # expected by the model. Note that `key` is the name of the feature column
     # we are trying to predict.
     loader = SingleStepTimeSeriesDataFrameLoader(
-        key='T (degC)', period=24, step=1, batch_size=32
+        key='T (degC)', period=24, step=1, batch_size=batch_size
     )
 
     # load pre-sanitized dataframes
