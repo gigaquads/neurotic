@@ -1,10 +1,10 @@
 import os
 
-from typing import List, Union, Optional, Text, Callable
+from typing import List, Union, Optional, Text
 
 from tensorflow.python.data.ops.dataset_ops import Dataset
 from tensorflow.keras import Model
-from tensorflow.keras.callbacks import History
+from tensorflow.keras.callbacks import History, Callback
 from tensorflow.keras.optimizers import Optimizer
 from tensorflow.keras.metrics import Metric
 from tensorflow.keras.losses import Loss
@@ -16,7 +16,7 @@ class Trainer:
         loss: Union[Text, Loss] = 'mean_squared_error',
         optimizer: Union[Text, Optimizer] = 'adam',
         metrics: Optional[List[Union[Text, Metric]]] = None,
-        callbacks: Optional[List[Callable]] = None,
+        callbacks: Optional[List[Callback]] = None,
     ):
         self.loss = loss
         self.optimizer = optimizer

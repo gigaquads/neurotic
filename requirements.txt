@@ -1,0 +1,9 @@
+cython
+numpy
+tensorflow>=2.4.1
+pandas
+sklearn
+matplotlib
+tabulate
+h5py
+pyyaml

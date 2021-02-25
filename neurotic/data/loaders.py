@@ -87,10 +87,10 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
 
     ```python
     key = 'predicted_feature_name'
-    window = 10
+    period = 10
     step = 1
 
-    loader = SingleStepTimeSeriesDataFrameLoader(key, window, step)
+    loader = SingleStepTimeSeriesDataFrameLoader(key, period, step)
     ds = loader.load(df)  # `df` being your "features" dataframe
     ```
 
@@ -99,19 +99,20 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
     def __init__(
         self,
         key: Text,
-        window: int,
+        period: int,
         step: int = 1,
         batch_size: int = 32
     ):
         """
-        `window`: total window size, including step size.
-        `step`: number data points at end of window to predict
+        `period`: number of time steps we look back at to predict
+        `step`: number data points at end of period to predict
         """
-        assert window > 0
-        assert window > step
+        assert period > 0
+        assert step > 0
 
         self.key = key
-        self.window = window
+        self.window = period + step
+        self.period = period
         self.batch_size = batch_size
         self.step = 1
     
@@ -119,7 +120,12 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
         self,
         df: Union[DataFrame, List[DataFrame]]
     ) -> Union[Dataset, List[Dataset]]:
-
+        """
+        Return one or more Datasets, where each batch consists of
+        `self.period` number of input feature rows and `self.step` number of
+        target labels to approximate/predict.
+        """
+        # normalize `df` arg to a list of DataFrames
         if isinstance(df, DataFrame):
             dfs = [df]
             return_many = False
@@ -127,17 +133,27 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
             return_many = True
             dfs = df
 
+        # index of the feature column we want to predict
         key_idx = dfs[0].columns.get_loc(self.key)
 
         def as_inputs_and_labels(x):
-            n = self.window - self.step
-            inputs = x[:, slice(None, n, None), :]
-            labels = x[:, slice(self.step, None, None), :]
+            """
+            This function is used as a map, applied to each element in the
+            generated Dataset. It takes each feature tensor, `x` in the
+            caller Dataset and replaces it with a tensor tuple of the form
+            (inputs, labels), where inputs contains the "period" portion of
+            the time window, and labels holds the target value we're trying
+            to predict.
+            """
+            n = self.period
+            inputs = x[:, :n, :]
+            labels = x[:, self.step:, :]
             labels = tf.stack([labels[:, :, key_idx]], axis=-1)
             inputs.set_shape([None, n, None])
             labels.set_shape([None, n, None])
             return (inputs, labels)
 
+        # build a Dataset for each DataFrame
         datasets = []
         for df in dfs: 
             ds = timeseries_dataset_from_array(
@@ -150,4 +166,5 @@ class SingleStepTimeSeriesDataFrameLoader(TimeSeriesDataFrameLoader):
             ).map(as_inputs_and_labels)
             datasets.append(ds)
 
+        # return one or a list of the built Datasets
         return datasets if return_many else datasets[0]
