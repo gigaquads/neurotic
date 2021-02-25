@@ -40,10 +40,9 @@ def main():
         ]
     )
 
-    # create a loader that prepares time series data, stored in a pandas
-    # DataFrame, by converting it to batched input and label tensors, as
-    # expected by the model. Note that `key` is the name of the feature column
-    # we are trying to predict.
+    # create a Loader, which prepares time series data stored in a DataFrame
+    # for use in our model, being trained to predict the next `step` number of
+    # time steps, given the previous `period` number of time steps.
     loader = SingleStepTimeSeriesDataFrameLoader(
         key='T (degC)', period=24, step=1, batch_size=batch_size
     )
