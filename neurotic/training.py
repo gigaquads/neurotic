@@ -29,13 +29,16 @@ class Trainer:
         epochs: int,
         ds_train: Dataset,
         ds_validation: Optional[Dataset] = None,
+        compile: bool = True,
         workers: Optional[int] = None,
     ) -> History:
-        model.compile(
-            loss=self.loss,
-            optimizer=self.optimizer,
-            metrics=self.metrics
-        )
+        if compile:
+            model.compile(
+                loss=self.loss,
+                optimizer=self.optimizer,
+                metrics=self.metrics
+            )
+
         history = model.fit(
             x=ds_train,
             epochs=epochs,
