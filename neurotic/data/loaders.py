@@ -115,6 +115,7 @@ class SingleStepTimeSeriesDatasetLoader(TimeSeriesDatasetLoader):
         self.period = period
         self.batch_size = batch_size
         self.step = step
+        self._memoized_first = None
     
     def on_load(
         self,
@@ -161,7 +162,7 @@ class SingleStepTimeSeriesDatasetLoader(TimeSeriesDatasetLoader):
                 targets=None,
                 sequence_length=self.window,
                 sequence_stride=1,
-                shuffle=False,
+                shuffle=True,
                 batch_size=self.batch_size,
             ).map(as_inputs_and_labels)
             datasets.append(ds)
